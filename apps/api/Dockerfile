@@ -2,11 +2,12 @@ FROM node:24-alpine AS deps
 WORKDIR /app
 RUN corepack enable
 COPY package.json pnpm-workspace.yaml tsconfig.base.json ./
+COPY pnpm-lock.yaml ./
 COPY packages/shared/package.json packages/shared/package.json
 COPY packages/ui/package.json packages/ui/package.json
 COPY apps/api/package.json apps/api/package.json
-COPY apps/api/prisma apps/api/prisma
 RUN pnpm install --filter @knife/api... --frozen-lockfile=false
+COPY apps/api/prisma apps/api/prisma
 WORKDIR /app/apps/api
 RUN pnpm prisma generate
 
@@ -14,6 +15,8 @@ FROM deps AS build
 WORKDIR /app
 COPY packages /app/packages
 COPY apps/api /app/apps/api
+COPY --from=deps /app/node_modules /app/node_modules
+COPY --from=deps /app/apps/api/node_modules /app/apps/api/node_modules
 WORKDIR /app/apps/api
 RUN pnpm build
 

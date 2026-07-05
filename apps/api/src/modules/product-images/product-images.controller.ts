@@ -3,12 +3,14 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from "multer";
 import { CurrentUser } from "../../common/current-user.decorator";
 import { JwtAuthGuard } from "../../common/jwt-auth.guard";
+import { StaffOnly } from "../../common/roles.decorator";
 import { RolesGuard } from "../../common/roles.guard";
 import { ProductImagesService } from "./product-images.service";
 import { UploadProductImageDto, UpdateProductImageDto } from "./dto/product-image.dto";
 
 @Controller("admin/products/:productId/images")
 @UseGuards(JwtAuthGuard, RolesGuard)
+@StaffOnly()
 export class ProductImagesController {
   constructor(private readonly service: ProductImagesService) {}
   @Post()

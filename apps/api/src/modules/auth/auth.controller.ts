@@ -4,6 +4,7 @@ import { JwtAuthGuard } from "../../common/jwt-auth.guard";
 import { CurrentUser } from "../../common/current-user.decorator";
 import { AuthService } from "./auth.service";
 import { LoginDto } from "./dto/login.dto";
+import { RegisterDto } from "./dto/register.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -12,6 +13,11 @@ export class AuthController {
   @Post("login")
   login(@Body() dto: LoginDto, @Res({ passthrough: true }) response: Response) {
     return this.auth.login(dto.email, dto.password, response);
+  }
+
+  @Post("register")
+  register(@Body() dto: RegisterDto, @Res({ passthrough: true }) response: Response) {
+    return this.auth.register(dto.name, dto.email, dto.password, response);
   }
 
   @Post("refresh")
@@ -24,5 +30,5 @@ export class AuthController {
 
   @Get("me")
   @UseGuards(JwtAuthGuard)
-  me(@CurrentUser() user: any) { return user; }
+  me(@CurrentUser() user: any) { return this.auth.me(user.id); }
 }

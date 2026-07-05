@@ -83,6 +83,7 @@ services:
       MAX_IMAGE_SIZE_MB: ${MAX_IMAGE_SIZE_MB:-8}
       ALLOWED_IMAGE_MIME_TYPES: ${ALLOWED_IMAGE_MIME_TYPES:-image/jpeg,image/png,image/webp}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-admin@example.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-change_me_admin_password}
       ADMIN_NAME: ${ADMIN_NAME:-Administrator}
       SMTP_HOST: ${SMTP_HOST:-}

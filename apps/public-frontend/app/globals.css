@@ -214,15 +214,125 @@ img {
   gap: 10px;
 }
 
-.admin-link {
+.auth-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-link {
   color: var(--soft);
   font-size: 0.88rem;
   font-weight: 600;
   transition: color 180ms ease;
 }
 
-.admin-link:hover,
-.admin-link:focus-visible {
+.auth-link:hover,
+.auth-link:focus-visible {
+  color: var(--text);
+}
+
+.auth-register {
+  min-height: 40px;
+  padding: 8px 13px;
+  font-size: 0.9rem;
+}
+
+.auth-loading {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
+
+.auth-menu {
+  position: relative;
+}
+
+.auth-summary {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.auth-summary::-webkit-details-marker {
+  display: none;
+}
+
+.auth-avatar,
+.account-avatar {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(226, 186, 103, 0.74);
+  border-radius: 8px;
+  background: rgba(209, 162, 74, 0.14);
+  color: var(--accent-strong);
+  font-weight: 900;
+}
+
+.auth-avatar {
+  width: 42px;
+  height: 42px;
+  font-size: 0.86rem;
+}
+
+.auth-summary__name {
+  color: var(--text);
+  font-weight: 800;
+}
+
+.auth-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 60;
+  display: grid;
+  min-width: 240px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: rgba(23, 19, 15, 0.98);
+  box-shadow: var(--shadow);
+}
+
+.auth-user {
+  display: grid;
+  gap: 2px;
+  border-bottom: 1px solid var(--line);
+  padding: 14px;
+}
+
+.auth-user strong {
+  color: var(--text);
+}
+
+.auth-user span {
+  color: var(--soft);
+  font-size: 0.88rem;
+}
+
+.auth-dropdown__item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 12px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.auth-dropdown__item:hover,
+.auth-dropdown__item:focus-visible {
+  background: rgba(231, 213, 184, 0.08);
   color: var(--text);
 }
 
@@ -748,6 +858,101 @@ img {
   margin: 0;
 }
 
+.account-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(340px, 440px);
+  gap: 44px;
+  align-items: start;
+}
+
+.account-copy {
+  display: grid;
+  gap: 16px;
+}
+
+.account-card {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+.account-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(10, 9, 7, 0.48);
+  padding: 4px;
+}
+
+.account-tabs button {
+  min-height: 40px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.account-tabs button.is-active {
+  background: rgba(209, 162, 74, 0.18);
+  color: var(--accent-strong);
+}
+
+.account-profile-head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.account-avatar {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 auto;
+  font-size: 1.08rem;
+}
+
+.account-profile-head h2,
+.account-profile-head p {
+  margin: 0;
+}
+
+.account-profile-head p {
+  color: var(--soft);
+}
+
+.account-details {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.account-details div {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.account-details dt {
+  color: var(--soft);
+}
+
+.account-details dd {
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .gallery {
   display: grid;
   gap: 14px;
@@ -970,7 +1175,9 @@ img {
 
   .desktop-nav,
   .header-cta,
-  .header-actions .admin-link {
+  .header-actions .auth-actions,
+  .header-actions .auth-menu,
+  .header-actions .auth-loading {
     display: none;
   }
 
@@ -1013,6 +1220,41 @@ img {
 
   .mobile-panel .btn-primary {
     width: 100%;
+  }
+
+  .auth-actions--mobile {
+    display: grid;
+    gap: 10px;
+  }
+
+  .auth-actions--mobile .auth-link,
+  .auth-menu--mobile .auth-summary,
+  .auth-menu--mobile .auth-dropdown__item {
+    width: 100%;
+  }
+
+  .auth-actions--mobile .auth-link {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+
+  .auth-menu--mobile .auth-summary {
+    justify-content: flex-start;
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+  }
+
+  .auth-menu--mobile .auth-dropdown {
+    position: static;
+    margin-top: 8px;
+  }
+
+  .account-shell {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1112,6 +1354,7 @@ img {
   }
 
   .lead-form,
+  .account-card,
   .feature-card,
   .contact-card,
   .spec-grid {

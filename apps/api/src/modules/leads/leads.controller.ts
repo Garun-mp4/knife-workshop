@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@n
 import { Throttle } from "@nestjs/throttler";
 import { LeadStatus } from "@prisma/client";
 import { JwtAuthGuard } from "../../common/jwt-auth.guard";
+import { StaffOnly } from "../../common/roles.decorator";
 import { RolesGuard } from "../../common/roles.guard";
 import { CreateLeadDto, UpdateLeadDto } from "./dto/lead.dto";
 import { LeadsService } from "./leads.service";
@@ -9,6 +10,7 @@ import { LeadsService } from "./leads.service";
 export class PublicLeadsController { constructor(private readonly service: LeadsService) {} @Throttle({ default: { ttl: 60_000, limit: 3 } }) @Post() create(@Body() dto: CreateLeadDto) { return this.service.create(dto); } }
 @Controller("admin/leads")
 @UseGuards(JwtAuthGuard, RolesGuard)
+@StaffOnly()
 export class LeadsController {
   constructor(private readonly service: LeadsService) {}
   @Get() list() { return this.service.list(); }

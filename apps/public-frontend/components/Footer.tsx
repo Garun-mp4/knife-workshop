@@ -15,7 +15,6 @@ export function Footer() {
           <Link href="/delivery-payment">Доставка и оплата</Link>
           <Link href="/documents">Документы</Link>
           <Link href="/privacy-policy">Конфиденциальность</Link>
-          <Link href="/admin/login">Админ</Link>
         </nav>
       </div>
     </footer>

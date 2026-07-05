@@ -8,6 +8,7 @@ datasource db {
 }
 
 enum UserRole {
+  CUSTOMER
   OWNER
   ADMIN
   MANAGER
@@ -54,7 +55,7 @@ model User {
   email        String   @unique
   passwordHash String
   name         String
-  role         UserRole @default(ADMIN)
+  role         UserRole @default(CUSTOMER)
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

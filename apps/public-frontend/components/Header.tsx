@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { AuthMenu } from "./AuthMenu";
 
 const navItems = [
   { href: "/catalog", label: "Каталог" },
@@ -52,9 +53,7 @@ export function Header() {
         </nav>
 
         <div className="header-actions">
-          <Link className="admin-link" href="/admin/login">
-            Админ
-          </Link>
+          <AuthMenu />
           <Link className="btn-primary header-cta" href="/custom-order">
             Обсудить заказ
           </Link>
@@ -88,9 +87,7 @@ export function Header() {
             <Link className="btn-primary" href="/custom-order" onClick={() => setOpen(false)}>
               Обсудить заказ
             </Link>
-            <Link className="admin-link" href="/admin/login" onClick={() => setOpen(false)}>
-              Вход в админку
-            </Link>
+            <AuthMenu variant="mobile" onNavigate={() => setOpen(false)} />
           </nav>
         </div>
       ) : null}

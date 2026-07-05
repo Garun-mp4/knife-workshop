@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } f
 import { ProductStatus } from "@prisma/client";
 import { CurrentUser } from "../../common/current-user.decorator";
 import { JwtAuthGuard } from "../../common/jwt-auth.guard";
+import { StaffOnly } from "../../common/roles.decorator";
 import { RolesGuard } from "../../common/roles.guard";
 import { CreateProductDto, UpdateProductDto } from "./dto/product.dto";
 import { ProductsService } from "./products.service";
@@ -22,6 +23,7 @@ export class PublicCategoryProductsController {
 
 @Controller("admin/products")
 @UseGuards(JwtAuthGuard, RolesGuard)
+@StaffOnly()
 export class ProductsController {
   constructor(private readonly service: ProductsService) {}
   @Get() list(@Query() query: Record<string, string>) { return this.service.adminList(query); }

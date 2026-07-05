@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../../common/jwt-auth.guard";
+import { StaffOnly } from "../../common/roles.decorator";
 import { RolesGuard } from "../../common/roles.guard";
 import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto, UpdateCategoryDto } from "./dto/category.dto";
@@ -9,6 +10,7 @@ export class PublicCategoriesController { constructor(private readonly service: 
 
 @Controller("admin/categories")
 @UseGuards(JwtAuthGuard, RolesGuard)
+@StaffOnly()
 export class CategoriesController {
   constructor(private readonly service: CategoriesService) {}
   @Get() list() { return this.service.adminList(); }

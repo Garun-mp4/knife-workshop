@@ -51,6 +51,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.11
         version: 4.3.2
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
       '@types/node':
         specifier: ^24.0.10
         version: 24.13.2
@@ -224,6 +227,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.11
         version: 4.3.2
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
       '@types/node':
         specifier: ^24.0.10
         version: 24.13.2
@@ -284,14 +290,19 @@ importers:
         version: 5.9.3
 
   packages/ui:
-    dependencies:
+    devDependencies:
+      '@types/react':
+        specifier: ^19.1.8
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: ^19.1.6
+        version: 19.2.3(@types/react@19.2.17)
       react:
         specifier: ^19.1.0
         version: 19.2.7
       react-dom:
         specifier: ^19.1.0
         version: 19.2.7(react@19.2.7)
-    devDependencies:
       typescript:
         specifier: ^5.8.3
         version: 5.9.3

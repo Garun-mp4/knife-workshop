@@ -28,7 +28,12 @@ export type LeadStatus =
   | "CLOSED"
   | "CANCELLED";
 
-export type UserRole = "OWNER" | "ADMIN" | "MANAGER";
+export type UserRole = "CUSTOMER" | "OWNER" | "ADMIN" | "MANAGER";
+export type AuthUser = { id: string; email: string; name: string; role: UserRole };
+
+export function isStaffRole(role: UserRole): boolean {
+  return role === "OWNER" || role === "ADMIN" || role === "MANAGER";
+}
 
 export type ApiSuccess<T> = { success: true; data: T };
 export type ApiFailure = { success: false; error: { code: string; message: string; details?: unknown[] } };

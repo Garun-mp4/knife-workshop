@@ -7,4 +7,5 @@ coverage
 .DS_Store
 .pnpm-store
 *.log
+*.tsbuildinfo
 apps/api/prisma/dev.db

@@ -4,17 +4,24 @@ import slugify from "slugify";
 
 const prisma = new PrismaClient();
 const slug = (value: string) => slugify(value, { lower: true, strict: true, locale: "ru" });
+const normalizeEmail = (value: string) => value.trim().toLowerCase();
+const configuredAdminEmails = (primaryEmail: string) =>
+  Array.from(new Set([primaryEmail, ...(process.env.ADMIN_EMAILS ?? "").split(",")].filter(Boolean).map((email) => normalizeEmail(email as string))));
 
 async function main() {
-  const email = process.env.ADMIN_EMAIL ?? "admin@example.com";
+  const email = normalizeEmail(process.env.ADMIN_EMAIL ?? "admin@example.com");
   const password = process.env.ADMIN_PASSWORD ?? "change_me_admin_password";
   const name = process.env.ADMIN_NAME ?? "Administrator";
 
-  await prisma.user.upsert({
-    where: { email },
-    update: { name, role: "OWNER", isActive: true },
-    create: { email, name, role: "OWNER", passwordHash: await argon2.hash(password) }
-  });
+  for (const [index, adminEmail] of configuredAdminEmails(email).entries()) {
+    const role = index === 0 ? "OWNER" : "ADMIN";
+    const adminName = index === 0 ? name : `Admin ${index + 1}`;
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: { name: adminName, role, isActive: true },
+      create: { email: adminEmail, name: adminName, role, passwordHash: await argon2.hash(password) }
+    });
+  }
 
   const categories = [
     "Кухонные ножи",
