@@ -56,7 +56,7 @@ export default async function Home() {
       <section
         className="hero-section"
         style={{
-          backgroundImage: `linear-gradient(90deg, rgba(15, 13, 10, 0.96) 0%, rgba(15, 13, 10, 0.78) 42%, rgba(15, 13, 10, 0.24) 76%), url(${SITE_IMAGES.hero})`
+          backgroundImage: `linear-gradient(90deg, rgba(250, 250, 247, 0.98) 0%, rgba(250, 250, 247, 0.86) 44%, rgba(250, 250, 247, 0.26) 78%), url(${SITE_IMAGES.hero})`
         }}
       >
         <div className="container hero-layout">

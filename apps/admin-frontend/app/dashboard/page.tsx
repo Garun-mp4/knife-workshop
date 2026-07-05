@@ -1,2 +1,49 @@
 import { apiGetServer } from "../../lib/server-api";
-export default async function Dashboard() { const [products, leads] = await Promise.all([apiGetServer<any[]>('/admin/products').catch(()=>[]), apiGetServer<any[]>('/admin/leads').catch(()=>[])]); const inStock = products.filter((p:any)=>p.status==='IN_STOCK').length; const sold = products.filter((p:any)=>p.status==='SOLD').length; const newLeads = leads.filter((l:any)=>l.status==='NEW').length; return <div><h1>Dashboard</h1><div style={{display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16}}>{[["Товаров",products.length],["В наличии",inStock],["Продано",sold],["Новых заявок",newLeads]].map(([k,v])=><div className="card" style={{padding:20}} key={k}><p className="muted">{k}</p><strong style={{fontSize:36}}>{v}</strong></div>)}</div><h2>Последние заявки</h2><div className="card"><table className="table"><tbody>{leads.slice(0,6).map((l:any)=><tr key={l.id}><td>{l.name}</td><td>{l.phone || l.email}</td><td>{l.type}</td><td>{l.status}</td></tr>)}</tbody></table></div></div>; }
+
+export default async function Dashboard() {
+  const [products, leads] = await Promise.all([
+    apiGetServer<any[]>("/admin/products").catch(() => []),
+    apiGetServer<any[]>("/admin/leads").catch(() => [])
+  ]);
+  const inStock = products.filter((product: any) => product.status === "IN_STOCK").length;
+  const sold = products.filter((product: any) => product.status === "SOLD").length;
+  const newLeads = leads.filter((lead: any) => lead.status === "NEW").length;
+  const metrics = [
+    ["Товаров", products.length],
+    ["В наличии", inStock],
+    ["Продано", sold],
+    ["Новых заявок", newLeads]
+  ];
+
+  return (
+    <div className="page-stack">
+      <h1>Dashboard</h1>
+      <div className="metric-grid">
+        {metrics.map(([label, value]) => (
+          <div className="card metric-card" key={label}>
+            <p className="muted">{label}</p>
+            <strong>{value}</strong>
+          </div>
+        ))}
+      </div>
+
+      <section>
+        <h2>Последние заявки</h2>
+        <div className="card table-card">
+          <table className="table">
+            <tbody>
+              {leads.slice(0, 6).map((lead: any) => (
+                <tr key={lead.id}>
+                  <td>{lead.name}</td>
+                  <td>{lead.phone || lead.email}</td>
+                  <td>{lead.type}</td>
+                  <td>{lead.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  );
+}
