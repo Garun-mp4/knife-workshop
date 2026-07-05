@@ -1,0 +1,26 @@
+{
+  "name": "knife-workshop",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Production-ready MVP for a handmade knife workshop catalog with public site, admin panel, API, worker and Docker Compose.",
+  "packageManager": "pnpm@10.12.1",
+  "scripts": {
+    "dev": "docker compose up --build",
+    "down": "docker compose down",
+    "logs": "docker compose logs -f",
+    "db:migrate": "docker compose exec api sh -lc \"./node_modules/.bin/prisma migrate deploy\"",
+    "db:seed": "docker compose exec api sh -lc \"PATH=/app/node_modules/.bin:/app/apps/api/node_modules/.bin:$PATH ./node_modules/.bin/prisma db seed\"",
+    "db:studio": "docker compose exec api sh -lc \"PATH=/app/node_modules/.bin:/app/apps/api/node_modules/.bin:$PATH ./node_modules/.bin/prisma studio --hostname 0.0.0.0\"",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "format": "pnpm -r format",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.36.0",
+    "@typescript-eslint/parser": "^8.36.0",
+    "eslint": "^9.30.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3"
+  }
+}

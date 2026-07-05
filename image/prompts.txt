@@ -1,0 +1,47 @@
+1. hero-workshop.webp
+Prompt:
+Premium handcrafted knife workshop hero image, dark cinematic artisan atmosphere, wooden workbench, forged kitchen and outdoor knives displayed neatly, warm side light, metal and wood textures, leather details, no people, no text, no logo, high-end craft brand style, realistic photography, 16:9 composition, dark background with empty space on left side for headline.
+
+2. about-master.webp
+Prompt:
+Professional artisan knife maker working at a wooden bench, hands polishing a handmade knife handle, warm workshop lighting, sparks and tools subtly visible in background, premium craftsmanship mood, realistic photography, no text, no logo, shallow depth of field, horizontal composition.
+
+3. process-forging.webp
+Prompt:
+Close-up of heated steel being forged on an anvil in a traditional knife workshop, warm orange glow, hammer and metal texture, dramatic but tasteful lighting, realistic photography, no text, no logo, high detail.
+
+4. process-handle.webp
+Prompt:
+Close-up of handmade knife handle shaping, natural wood handle, fine dust, artisan tools, warm light, premium craft aesthetic, realistic photography, no text, no logo.
+
+5. process-sharpening.webp
+Prompt:
+Close-up of a handmade knife being sharpened on a whetstone, water droplets, clean blade reflection, calm precise craftsmanship, realistic photography, no text, no logo, premium product style.
+
+6. custom-order.webp
+Prompt:
+Elegant composition of knife design sketches, wood samples, steel blanks and leather pieces on a dark wooden table, custom handmade knife planning concept, premium artisan brand style, warm light, no text, no logo, realistic photography.
+
+7. delivery-packaging.webp
+Prompt:
+Premium handmade knife packaging on a wooden table, kraft box, leather sheath, care card without readable text, warm natural light, high-end gift presentation, no logo, no text, realistic photography.
+
+8. documents-guarantee.webp
+Prompt:
+A handmade knife placed beside neutral certificate papers and quality inspection tools on a dark wooden desk, legal and quality assurance concept, no readable text, no logo, realistic photography, premium craft mood.
+
+9. empty-catalog.webp
+Prompt:
+Minimal dark artisan workbench with subtle knife-making tools in background, empty center area, premium handcrafted workshop mood, no knife as main object, no text, no logo, realistic photography.
+
+10. portfolio-sold.webp
+Prompt:
+Beautiful display of several premium handmade knives on dark leather and walnut wood, collector portfolio mood, warm dramatic lighting, realistic photography, no text, no logo, high-end catalog style.
+
+11. contact-workshop.webp
+Prompt:
+Warm artisan workshop entrance or workbench with phone, notebook, leather sheath and knife-making tools, inviting contact section image, premium craft atmosphere, no text, no logo, realistic photography.
+
+12. og-default.webp
+Prompt:
+Premium handmade knives arranged on dark wood and leather, cinematic warm lighting, luxury craft brand style, strong composition for social media preview, no text, no logo, realistic photography, 1200x630 aspect ratio.

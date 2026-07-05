@@ -1,0 +1,6 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { apiGet, apiSend } from "../../../lib/api";
+const statuses=["NEW","IN_PROGRESS","CONTACTED","WAITING_PAYMENT","ACCEPTED","IN_PRODUCTION","READY","SHIPPED","CLOSED","CANCELLED"];
+export default function Lead(){ const {id}=useParams<{id:string}>(); const router=useRouter(); const [lead,setLead]=useState<any>(); useEffect(()=>{apiGet(`/admin/leads/${id}`).then(setLead)},[id]); if(!lead)return <p>Загрузка...</p>; async function status(s:string){ await apiSend(`/admin/leads/${id}/status`,'PATCH',{status:s}); const next=await apiGet(`/admin/leads/${id}`); setLead(next); } async function del(){ if(confirm('Удалить заявку?')){ await apiSend(`/admin/leads/${id}`,'DELETE'); router.push('/leads'); }} return <div><h1>Заявка: {lead.name}</h1><div className="card" style={{padding:24, display:'grid', gap:12}}><p>Телефон: {lead.phone || '—'}</p><p>Email: {lead.email || '—'}</p><p>Messenger: {lead.messenger || '—'}</p><p>Товар: {lead.product?.title || '—'}</p><p>Сообщение: {lead.message || '—'}</p><select className="input" value={lead.status} onChange={(e)=>status(e.target.value)}>{statuses.map(s=><option key={s}>{s}</option>)}</select><button className="btn btn-danger" onClick={del}>Удалить</button></div></div> }

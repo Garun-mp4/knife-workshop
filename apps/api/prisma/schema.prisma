@@ -1,0 +1,214 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MANAGER
+}
+
+enum ProductStatus {
+  DRAFT
+  IN_STOCK
+  MADE_TO_ORDER
+  SOLD
+  HIDDEN
+  COMING_SOON
+  ARCHIVED
+}
+
+enum LeadStatus {
+  NEW
+  IN_PROGRESS
+  CONTACTED
+  WAITING_PAYMENT
+  ACCEPTED
+  IN_PRODUCTION
+  READY
+  SHIPPED
+  CLOSED
+  CANCELLED
+}
+
+enum LeadType {
+  PRODUCT_ORDER
+  SIMILAR_ORDER
+  CUSTOM_ORDER
+  GENERAL_QUESTION
+}
+
+enum PageStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         UserRole @default(ADMIN)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  auditLogs    AuditLog[]
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products    Product[]
+}
+
+model Product {
+  id                    String        @id @default(cuid())
+  title                 String
+  slug                  String        @unique
+  shortDescription      String?
+  description           String?
+  price                 Decimal?      @db.Decimal(10, 2)
+  oldPrice              Decimal?      @db.Decimal(10, 2)
+  pricePrefix           String?
+  status                ProductStatus @default(DRAFT)
+  categoryId            String?
+  category              Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  purpose               String?
+  steel                 String?
+  bladeLengthMm          Int?
+  totalLengthMm          Int?
+  spineThicknessMm       Decimal?      @db.Decimal(5, 2)
+  handleMaterial         String?
+  sheathMaterial         String?
+  weightGrams            Int?
+  hardnessHrc            Decimal?      @db.Decimal(4, 1)
+  equipment              String?
+  productionTimeDays     Int?
+  engravingAvailable     Boolean       @default(false)
+  certificateText        String?
+  certificateFileUrl     String?
+
+  seoTitle               String?
+  seoDescription         String?
+  sortOrder              Int           @default(0)
+  isFeatured             Boolean       @default(false)
+
+  images                ProductImage[]
+  leads                 Lead[]
+
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+}
+
+model ProductImage {
+  id              String   @id @default(cuid())
+  productId       String
+  product         Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  originalName    String
+  alt             String?
+  bucket          String
+  originalKey     String
+  largeKey        String?
+  mediumKey       String?
+  thumbKey        String?
+  placeholderKey  String?
+  mimeType        String
+  sizeBytes       Int
+  width           Int?
+  height          Int?
+  isMain          Boolean  @default(false)
+  sortOrder       Int      @default(0)
+  pendingDelete   Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Lead {
+  id          String     @id @default(cuid())
+  type        LeadType
+  status      LeadStatus @default(NEW)
+
+  productId   String?
+  product     Product?   @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  name        String
+  phone       String?
+  email       String?
+  messenger   String?
+  city        String?
+  budget      String?
+  message     String?
+
+  sourceUrl   String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmContent  String?
+  utmTerm     String?
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  clientName  String
+  city        String?
+  text        String
+  rating      Int?
+  imageUrl    String?
+  isPublished Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Page {
+  id             String     @id @default(cuid())
+  title          String
+  slug           String     @unique
+  content        String
+  status         PageStatus @default(DRAFT)
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}

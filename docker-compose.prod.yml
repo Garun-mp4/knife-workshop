@@ -1,0 +1,42 @@
+services:
+  nginx:
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      # Terminate HTTPS at an external proxy or extend nginx.conf with TLS certificates.
+      # - "443:443"
+
+  public-frontend:
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+
+  admin-frontend:
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+
+  api:
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      COOKIE_SECURE: "true"
+
+  worker:
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+
+  postgres:
+    restart: unless-stopped
+    ports: []
+
+  redis:
+    restart: unless-stopped
+    ports: []
+
+  minio:
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      # Console 9001 intentionally not published in production.
