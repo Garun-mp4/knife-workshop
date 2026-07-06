@@ -23,6 +23,7 @@ async function readUser(response: Response): Promise<AuthUser | null> {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (pathname.includes("/_next") || pathname.includes("/favicon")) return NextResponse.next();
+  if (pathname.endsWith("/login")) return NextResponse.next();
   const cookie = request.headers.get("cookie") ?? "";
   const me = await fetch(`${apiBase()}/auth/me`, { headers: { cookie }, cache: "no-store" });
   let user = await readUser(me);

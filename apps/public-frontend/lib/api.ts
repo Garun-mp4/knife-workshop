@@ -1,7 +1,9 @@
 import type { ApiResponse, ProductDto } from "@knife/shared";
 
 const serverBase = process.env.INTERNAL_API_URL || process.env.API_URL || "http://localhost:8080/api";
-const clientBase = process.env.NEXT_PUBLIC_API_URL || "/api";
+const clientBase =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" && window.location.port === "3000" ? "http://localhost:8080/api" : "/api");
 
 async function unwrap<T>(res: Response): Promise<T> {
   const json = (await res.json()) as ApiResponse<T>;

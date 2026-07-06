@@ -6,7 +6,11 @@ export default async function NewProduct() {
 
   return (
     <div className="page-stack">
-      <h1>Новый товар</h1>
+      <div className="page-intro-admin">
+        <p className="eyebrow">Витрина</p>
+        <h1>Новый товар</h1>
+        <p className="muted">Заполните основу карточки. Фотографии можно добавить после сохранения товара.</p>
+      </div>
       <ProductForm categories={categories} />
     </div>
   );

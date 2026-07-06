@@ -18,27 +18,51 @@ export default function Categories() {
 
   return (
     <div className="page-stack">
-      <h1>Категории</h1>
+      <div className="page-intro-admin">
+        <p className="eyebrow">Структура каталога</p>
+        <h1>Категории</h1>
+        <p className="muted">Категории помогают клиенту быстро понять назначение изделий.</p>
+      </div>
       <form action={create} className="card admin-form admin-form--inline">
-        <input className="input" name="name" placeholder="Название" required />
-        <input className="input" name="slug" placeholder="slug" />
+        <label className="field">
+          <span className="field__label">Название</span>
+          <input className="input" name="name" placeholder="Кухонные ножи…" required />
+        </label>
+        <label className="field">
+          <span className="field__label">Slug</span>
+          <input className="input" name="slug" placeholder="kuhonnye-nozhi…" autoComplete="off" />
+        </label>
         <button className="btn" type="submit">
           Создать
         </button>
       </form>
 
       <div className="card table-card">
-        <table className="table">
-          <tbody>
-            {items.map((category) => (
-              <tr key={category.id}>
-                <td>{category.name}</td>
-                <td>{category.slug}</td>
-                <td>{category._count?.products ?? 0} товаров</td>
+        {items.length ? (
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Название</th>
+                <th>Slug</th>
+                <th>Товары</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {items.map((category) => (
+                <tr key={category.id}>
+                  <td>{category.name}</td>
+                  <td>{category.slug}</td>
+                  <td>{category._count?.products ?? 0}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="empty-admin">
+            <h2>Категорий пока нет</h2>
+            <p className="muted">Создайте первую категорию перед наполнением каталога.</p>
+          </div>
+        )}
       </div>
     </div>
   );

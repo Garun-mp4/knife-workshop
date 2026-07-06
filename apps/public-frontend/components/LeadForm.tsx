@@ -38,7 +38,7 @@ export function LeadForm({
 
   if (state === "success") {
     return (
-      <div className="card success-card">
+      <div className="card success-card" aria-live="polite">
         <h3>Заявка отправлена</h3>
         <p className="muted">Мастер свяжется с вами вручную через указанный контакт.</p>
       </div>
@@ -49,20 +49,45 @@ export function LeadForm({
     <form action={submit} className="card lead-form">
       <h3>{title}</h3>
       <p className="muted lead-form__intro">Оставьте удобный контакт и коротко опишите задачу.</p>
-      <input className="input" name="name" placeholder="Имя" required />
-      <input className="input" name="phone" placeholder="Телефон" />
-      <input className="input" name="email" type="email" placeholder="Email" />
-      <input className="input" name="messenger" placeholder="Telegram / WhatsApp" />
-      <input className="input" name="city" placeholder="Город" />
-      <input className="input" name="budget" placeholder="Бюджет" />
-      <textarea className="input" name="message" placeholder="Комментарий" rows={5} />
+      <label className="field">
+        <span className="field__label">Имя</span>
+        <input className="input" name="name" placeholder="Как к вам обращаться…" required autoComplete="name" />
+      </label>
+      <div className="form-grid form-grid--2">
+        <label className="field">
+          <span className="field__label">Телефон</span>
+          <input className="input" name="phone" type="tel" inputMode="tel" placeholder="+7 999 000-00-00…" autoComplete="tel" />
+        </label>
+        <label className="field">
+          <span className="field__label">Email</span>
+          <input className="input" name="email" type="email" placeholder="name@example.com…" autoComplete="email" spellCheck={false} />
+        </label>
+      </div>
+      <div className="form-grid form-grid--2">
+        <label className="field">
+          <span className="field__label">Telegram или WhatsApp</span>
+          <input className="input" name="messenger" placeholder="@username или номер…" autoComplete="off" />
+        </label>
+        <label className="field">
+          <span className="field__label">Город</span>
+          <input className="input" name="city" placeholder="Астрахань…" autoComplete="address-level2" />
+        </label>
+      </div>
+      <label className="field">
+        <span className="field__label">Бюджет</span>
+        <input className="input" name="budget" placeholder="Например, до 15000 ₽…" inputMode="decimal" autoComplete="off" />
+      </label>
+      <label className="field">
+        <span className="field__label">Комментарий</span>
+        <textarea className="input" name="message" placeholder="Назначение, материалы, сроки, пожелания по документам…" rows={5} />
+      </label>
       <label className="form-consent">
         <input type="checkbox" name="consent" required /> Я согласен на обработку персональных данных и принимаю
         политику конфиденциальности.
       </label>
-      {state === "error" ? <p className="form-error">{error}</p> : null}
+      {state === "error" ? <p className="form-error" aria-live="polite">{error}</p> : null}
       <button className="btn-primary" type="submit" disabled={state === "loading"}>
-        {state === "loading" ? "Отправляем..." : "Отправить"}
+        {state === "loading" ? "Отправляем…" : "Отправить заявку"}
       </button>
     </form>
   );

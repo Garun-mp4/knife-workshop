@@ -56,7 +56,7 @@ export function AccountClient({ initialMode }: { initialMode: Mode }) {
       <section className="section section--tight">
         <div className="container account-shell">
           <div className="card account-card">
-            <p className="muted">Загрузка профиля...</p>
+            <p className="muted">Загрузка профиля…</p>
           </div>
         </div>
       </section>
@@ -70,7 +70,7 @@ export function AccountClient({ initialMode }: { initialMode: Mode }) {
           <div className="account-copy">
             <span className="section-kicker">Личный кабинет</span>
             <h1 className="page-title">Профиль</h1>
-            <p className="page-copy">Сессия сохранена в защищенных cookies, поэтому повторный вход не нужен после обновления сайта.</p>
+            <p className="page-copy">Сайт запомнил вход в защищенных cookies, поэтому профиль останется доступен после обновления страницы.</p>
           </div>
           <div className="card account-card">
             <div className="account-profile-head">
@@ -114,7 +114,7 @@ export function AccountClient({ initialMode }: { initialMode: Mode }) {
         <div className="account-copy">
           <span className="section-kicker">Аккаунт</span>
           <h1 className="page-title">{mode === "register" ? "Регистрация" : "Вход"}</h1>
-          <p className="page-copy">Войдите или создайте аккаунт, чтобы сайт запомнил вас между посещениями.</p>
+          <p className="page-copy">Войдите или создайте аккаунт, чтобы быстрее возвращаться к заказам и админке, если у вас есть доступ сотрудника.</p>
         </div>
         <form action={submit} className="card account-card">
           <div className="account-tabs" role="tablist" aria-label="Режим аккаунта">
@@ -125,12 +125,31 @@ export function AccountClient({ initialMode }: { initialMode: Mode }) {
               Регистрация
             </button>
           </div>
-          {mode === "register" ? <input className="input" name="name" placeholder="Имя" required minLength={2} /> : null}
-          <input className="input" name="email" type="email" placeholder="Email" required />
-          <input className="input" name="password" type="password" placeholder="Пароль" required minLength={10} />
-          {error ? <p className="form-error">{error}</p> : null}
+          {mode === "register" ? (
+            <label className="field">
+              <span className="field__label">Имя</span>
+              <input className="input" name="name" placeholder="Как к вам обращаться…" required minLength={2} autoComplete="name" />
+            </label>
+          ) : null}
+          <label className="field">
+            <span className="field__label">Email</span>
+            <input className="input" name="email" type="email" placeholder="name@example.com…" required autoComplete="email" spellCheck={false} />
+          </label>
+          <label className="field">
+            <span className="field__label">Пароль</span>
+            <input
+              className="input"
+              name="password"
+              type="password"
+              placeholder="Минимум 10 символов…"
+              required
+              minLength={10}
+              autoComplete={mode === "register" ? "new-password" : "current-password"}
+            />
+          </label>
+          {error ? <p className="form-error" aria-live="polite">{error}</p> : null}
           <button className="btn-primary" type="submit" disabled={busy}>
-            {busy ? "Отправка..." : mode === "register" ? "Зарегистрироваться" : "Войти"}
+            {busy ? "Отправляем…" : mode === "register" ? "Зарегистрироваться" : "Войти"}
           </button>
         </form>
       </div>

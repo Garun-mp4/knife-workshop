@@ -101,6 +101,19 @@ export const leadTypeLabel: Record<LeadType, string> = {
   GENERAL_QUESTION: "Общий вопрос"
 };
 
+export const leadStatusLabel: Record<LeadStatus, string> = {
+  NEW: "Новая",
+  IN_PROGRESS: "В работе",
+  CONTACTED: "Связались",
+  WAITING_PAYMENT: "Ожидает оплату",
+  ACCEPTED: "Принята",
+  IN_PRODUCTION: "В производстве",
+  READY: "Готова",
+  SHIPPED: "Отправлена",
+  CLOSED: "Закрыта",
+  CANCELLED: "Отменена"
+};
+
 export function productCta(status: ProductStatus): string {
   switch (status) {
     case "IN_STOCK": return "Заказать";

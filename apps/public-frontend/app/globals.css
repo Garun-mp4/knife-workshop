@@ -259,9 +259,14 @@ img {
   min-height: 42px;
   align-items: center;
   gap: 10px;
+  border: 0;
   border-radius: 10px;
+  background: transparent;
+  color: inherit;
   cursor: pointer;
+  font: inherit;
   list-style: none;
+  padding: 0;
 }
 
 .auth-summary::-webkit-details-marker {
@@ -812,6 +817,27 @@ img {
   padding: 24px;
 }
 
+.form-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.form-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.field__label {
+  color: var(--soft);
+  font-size: 0.82rem;
+  font-weight: 760;
+}
+
 .lead-form__intro,
 .success-card h3,
 .success-card p,
@@ -1272,6 +1298,7 @@ img {
   }
 
   .filter-form,
+  .form-grid--2,
   .spec-grid,
   .detail-item {
     grid-template-columns: 1fr;

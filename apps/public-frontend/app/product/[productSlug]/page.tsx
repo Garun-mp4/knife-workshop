@@ -22,6 +22,9 @@ export default async function ProductPage({ params }: { params: Promise<{ produc
   const { productSlug } = await params;
   const product = await apiGet<ProductDto>(`/public/products/${productSlug}`);
   const leadType: LeadType = product.status === "SOLD" ? "SIMILAR_ORDER" : "PRODUCT_ORDER";
+  const price = product.price
+    ? new Intl.NumberFormat("ru-RU", { style: "currency", currency: "RUB", maximumFractionDigits: 0 }).format(Number(product.price))
+    : null;
   const specs = [
     ["Назначение", product.purpose],
     ["Сталь", product.steel],
@@ -45,7 +48,7 @@ export default async function ProductPage({ params }: { params: Promise<{ produc
           <h1 className="page-title">{product.title}</h1>
           {product.shortDescription ? <p className="page-copy">{product.shortDescription}</p> : null}
           <strong className="price">
-            {product.price ? `${product.pricePrefix ? `${product.pricePrefix} ` : ""}${product.price} ₽` : "Цена по запросу"}
+            {price ? `${product.pricePrefix ? `${product.pricePrefix} ` : ""}${price}` : "Цена по запросу"}
           </strong>
           {product.status === "SOLD" ? (
             <p className="card sold-note">Этот нож уже продан, но мастер может изготовить похожий под ваши пожелания.</p>

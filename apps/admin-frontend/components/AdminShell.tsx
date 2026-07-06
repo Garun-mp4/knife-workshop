@@ -17,15 +17,15 @@ import { usePathname } from "next/navigation";
 import { apiSend } from "../lib/api";
 
 const links = [
-  { href: "/dashboard", label: "Dashboard", icon: Gauge },
+  { href: "/dashboard", label: "Обзор", icon: Gauge },
   { href: "/products", label: "Товары", icon: Boxes },
   { href: "/categories", label: "Категории", icon: LayoutList },
   { href: "/leads", label: "Заявки", icon: MessageSquareText },
   { href: "/reviews", label: "Отзывы", icon: Star },
   { href: "/pages", label: "Страницы", icon: FileText },
   { href: "/settings", label: "Настройки", icon: Settings },
-  { href: "/media-cleanup", label: "Media cleanup", icon: Images },
-  { href: "/audit-log", label: "Audit log", icon: ScrollText }
+  { href: "/media-cleanup", label: "Медиа", icon: Images },
+  { href: "/audit-log", label: "Журнал", icon: ScrollText }
 ];
 
 function pageLabel(pathname: string) {
@@ -40,7 +40,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   async function logout() {
     await apiSend("/auth/logout", "POST");
-    window.location.href = "/account?mode=login";
+    window.location.href = "/admin/login";
   }
 
   return (
@@ -69,7 +69,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div className="sidebar__footer">
-          <p className="sidebar__hint">Доступ только для OWNER, ADMIN и MANAGER.</p>
+          <p className="sidebar__hint">Доступ только для сотрудников мастерской. Все изменения пишутся в журнал.</p>
           <button className="btn btn-muted" type="button" onClick={logout}>
             <LogOut size={16} aria-hidden="true" strokeWidth={1.9} />
             Выйти
@@ -83,7 +83,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <p className="admin-topbar__label">Раздел</p>
             <p className="admin-topbar__title">{pageLabel(pathname)}</p>
           </div>
-          <p className="admin-topbar__meta">Светлая панель управления мастерской</p>
+          <p className="admin-topbar__meta">Каталог, заявки, контент и настройки сайта</p>
         </header>
         <main className="main">{children}</main>
       </div>

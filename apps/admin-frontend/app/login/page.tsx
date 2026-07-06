@@ -10,8 +10,9 @@ export default function Login() {
 
   async function submit(formData: FormData) {
     setError("");
+    const payload = Object.fromEntries(formData.entries());
     try {
-      await apiSend("/auth/login", "POST", Object.fromEntries(formData.entries()));
+      await apiSend("/auth/login", "POST", payload);
       router.push("/dashboard");
     } catch (e: any) {
       setError(e.message);
@@ -24,9 +25,16 @@ export default function Login() {
         <div>
           <p className="admin-topbar__label">Knife Admin</p>
           <h1>Вход в админку</h1>
+          <p className="muted">Для сотрудников мастерской с ролью владельца, администратора или менеджера.</p>
         </div>
-        <input className="input" name="email" type="email" placeholder="Email" required />
-        <input className="input" name="password" type="password" placeholder="Пароль" required minLength={10} />
+        <label className="field">
+          <span className="field__label">Email</span>
+          <input className="input" name="email" type="email" placeholder="admin@example.com…" required autoComplete="email" spellCheck={false} />
+        </label>
+        <label className="field">
+          <span className="field__label">Пароль</span>
+          <input className="input" name="password" type="password" placeholder="Минимум 10 символов…" required minLength={10} autoComplete="current-password" />
+        </label>
         {error ? <p className="error-text">{error}</p> : null}
         <button className="btn" type="submit">
           Войти

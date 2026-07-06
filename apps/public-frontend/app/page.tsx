@@ -143,7 +143,7 @@ export default async function Home() {
             {processSteps.map((step) => (
               <article className="card process-card" key={step.title}>
                 <div className="process-card__media">
-                  <img src={step.image} alt={step.alt} />
+                  <img src={step.image} alt={step.alt} width={800} height={600} loading="lazy" />
                 </div>
                 <div className="process-card__body">
                   <h3>{step.title}</h3>

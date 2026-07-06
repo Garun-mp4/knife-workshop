@@ -4,13 +4,21 @@ import Link from "next/link";
 import { StatusBadge } from "./StatusBadge";
 
 export function ProductCard({ product }: { product: ProductDto }) {
-  const image = product.images?.[0]?.thumbUrl || product.images?.[0]?.mediumUrl;
-  const imageAlt = product.images?.[0]?.alt || product.title;
+  const mainImage = product.images?.[0];
+  const image = mainImage?.thumbUrl || mainImage?.mediumUrl;
+  const imageAlt = mainImage?.alt || product.title;
+  const price = product.price
+    ? new Intl.NumberFormat("ru-RU", { style: "currency", currency: "RUB", maximumFractionDigits: 0 }).format(Number(product.price))
+    : null;
 
   return (
     <article className="card product-card">
       <Link className="product-card__media" href={`/product/${product.slug}`}>
-        {image ? <img src={image} alt={imageAlt} /> : <span className="product-card__placeholder">Фото скоро</span>}
+        {image ? (
+          <img src={image} alt={imageAlt} width={mainImage?.width ?? 400} height={mainImage?.height ?? 300} loading="lazy" />
+        ) : (
+          <span className="product-card__placeholder">Фото скоро</span>
+        )}
       </Link>
       <div className="product-card__body">
         <StatusBadge status={product.status} />
@@ -21,7 +29,7 @@ export function ProductCard({ product }: { product: ProductDto }) {
           {product.category?.name ?? "Категория"} · {product.steel || "сталь по задаче"}
         </p>
         <strong className="price">
-          {product.price ? `${product.pricePrefix ? `${product.pricePrefix} ` : ""}${product.price} ₽` : "Цена по запросу"}
+          {price ? `${product.pricePrefix ? `${product.pricePrefix} ` : ""}${price}` : "Цена по запросу"}
         </strong>
         <Link className="btn-secondary product-card__action" href={`/product/${product.slug}`}>
           {productCta(product.status)}
