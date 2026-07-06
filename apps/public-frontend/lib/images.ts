@@ -1,14 +1,14 @@
 export const SITE_IMAGES = {
-  hero: "/images/hero-workshop.webp",
-  aboutMaster: "/images/about-master.webp",
-  processForging: "/images/process-forging.webp",
-  processHandle: "/images/process-handle.webp",
-  processSharpening: "/images/process-sharpening.webp",
-  customOrder: "/images/custom-order.webp",
-  deliveryPackaging: "/images/delivery-packaging.webp",
-  documentsGuarantee: "/images/documents-guarantee.webp",
-  emptyCatalog: "/images/empty-catalog.webp",
-  portfolioSold: "/images/portfolio-sold.webp",
-  contactWorkshop: "/images/contact-workshop.webp",
-  ogDefault: "/images/og-default.webp"
+  hero: "/images/hero-workshop-v2.webp",
+  aboutMaster: "/images/about-master-v2.webp",
+  processForging: "/images/process-forging-v2.webp",
+  processHandle: "/images/process-handle-v2.webp",
+  processSharpening: "/images/process-sharpening-v2.webp",
+  customOrder: "/images/custom-order-v2.webp",
+  deliveryPackaging: "/images/delivery-packaging-v2.webp",
+  documentsGuarantee: "/images/documents-guarantee-v2.webp",
+  emptyCatalog: "/images/empty-catalog-v2.webp",
+  portfolioSold: "/images/portfolio-sold-v2.webp",
+  contactWorkshop: "/images/contact-workshop-v2.webp",
+  ogDefault: "/images/og-default-v2.webp"
 };
