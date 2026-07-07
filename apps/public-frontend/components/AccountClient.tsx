@@ -139,6 +139,7 @@ export function AccountClient({ initialMode }: { initialMode: Mode }) {
                 <h2>{user.name}</h2>
                 <p>{user.email}</p>
               </div>
+              {isStaffRole(user.role) ? <span className="status-badge">Администратор</span> : null}
             </div>
             <form action={uploadAvatar} className="avatar-upload">
               <input className="input" type="file" name="file" accept="image/png,image/jpeg,image/webp" />
@@ -167,7 +168,6 @@ export function AccountClient({ initialMode }: { initialMode: Mode }) {
                 <div><dt>WhatsApp</dt><dd>{user.whatsapp || "Не указан"}</dd></div>
                 <div><dt>Город</dt><dd>{user.city || "Не указан"}</dd></div>
                 <div><dt>Доставка</dt><dd>{user.deliveryAddress || "Не указана"}</dd></div>
-                <div><dt>Роль</dt><dd>{user.role === "CUSTOMER" ? "Пользователь" : user.role}</dd></div>
               </dl>
             )}
             <div className="account-actions">
