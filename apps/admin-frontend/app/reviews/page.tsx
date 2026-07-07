@@ -2,21 +2,31 @@
 
 import { useEffect, useState } from "react";
 import { apiGet, apiSend } from "../../lib/api";
+import { formatDateTime } from "../../lib/labels";
 
 export default function Reviews() {
   const [items, setItems] = useState<any[]>([]);
+  const [error, setError] = useState("");
   const load = () => apiGet<any[]>("/admin/reviews").then(setItems);
 
   useEffect(() => {
-    load();
+    load().catch((e) => setError(e instanceof Error ? e.message : "Не удалось загрузить отзывы"));
   }, []);
 
-  async function create(formData: FormData) {
-    const payload: any = Object.fromEntries(formData.entries());
-    payload.rating = payload.rating ? Number(payload.rating) : undefined;
-    payload.isPublished = payload.isPublished === "on";
-    await apiSend("/admin/reviews", "POST", payload);
-    load();
+  async function publish(id: string, isPublished: boolean) {
+    setError("");
+    try {
+      await apiSend(`/admin/reviews/${id}`, "PATCH", { isPublished });
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Не удалось обновить отзыв");
+    }
+  }
+
+  async function del(id: string) {
+    if (!confirm("Удалить отзыв?")) return;
+    await apiSend(`/admin/reviews/${id}`, "DELETE");
+    await load();
   }
 
   return (
@@ -24,54 +34,38 @@ export default function Reviews() {
       <div className="page-intro-admin">
         <p className="eyebrow">Доверие</p>
         <h1>Отзывы</h1>
-        <p className="muted">Публикуйте только проверенные отзывы клиентов с понятным городом и оценкой.</p>
+        <p className="muted">Отзывы приходят от покупателей после оплаты товара. Здесь их можно опубликовать или скрыть.</p>
       </div>
-      <form action={create} className="card admin-form">
-        <div className="form-grid form-grid--2">
-          <label className="field">
-            <span className="field__label">Клиент</span>
-            <input className="input" name="clientName" placeholder="Алексей…" required />
-          </label>
-          <label className="field">
-            <span className="field__label">Город</span>
-            <input className="input" name="city" placeholder="Москва…" />
-          </label>
-        </div>
-        <label className="field">
-          <span className="field__label">Текст отзыва</span>
-          <textarea className="input" name="text" placeholder="Что клиент отметил в работе…" required />
-        </label>
-        <label className="field">
-          <span className="field__label">Оценка</span>
-          <input className="input" name="rating" type="number" min="1" max="5" step="1" placeholder="5…" />
-        </label>
-        <label className="check-row">
-          <input type="checkbox" name="isPublished" />
-          <span>Опубликовать на сайте</span>
-        </label>
-        <button className="btn" type="submit">
-          Добавить
-        </button>
-      </form>
-
+      {error ? <p className="error-text">{error}</p> : null}
       <div className="card table-card">
         {items.length ? (
           <table className="table">
             <thead>
               <tr>
                 <th>Клиент</th>
-                <th>Город</th>
+                <th>Товар</th>
+                <th>Текст</th>
                 <th>Оценка</th>
+                <th>Дата</th>
                 <th>Публикация</th>
               </tr>
             </thead>
             <tbody>
               {items.map((review) => (
                 <tr key={review.id}>
-                  <td>{review.clientName}</td>
-                  <td>{review.city || "—"}</td>
+                  <td>{review.clientName}<p className="table-note">{review.city || review.user?.email || "—"}</p></td>
+                  <td>{review.product?.title || "—"}</td>
+                  <td>{review.text}</td>
                   <td>{review.rating ?? "—"}</td>
-                  <td>{review.isPublished ? "Опубликован" : "Скрыт"}</td>
+                  <td>{formatDateTime(review.createdAt)}</td>
+                  <td>
+                    <div className="inline-actions">
+                      <button className={review.isPublished ? "btn btn-muted" : "btn"} type="button" onClick={() => publish(review.id, !review.isPublished)}>
+                        {review.isPublished ? "Скрыть" : "Опубликовать"}
+                      </button>
+                      <button className="btn btn-danger" type="button" onClick={() => del(review.id)}>Удалить</button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -79,7 +73,7 @@ export default function Reviews() {
         ) : (
           <div className="empty-admin">
             <h2>Отзывов пока нет</h2>
-            <p className="muted">Добавьте первый отзыв после согласования текста с клиентом.</p>
+            <p className="muted">После оплаченных заказов покупатели смогут отправлять отзывы из профиля.</p>
           </div>
         )}
       </div>

@@ -1,6 +1,6 @@
 # Knife Workshop Catalog
 
-Production-ready MVP сайта ножевой мастерской: публичный сайт, каталог, портфолио проданных работ, формы заявок, админ-панель, backend API, worker, PostgreSQL, Redis, MinIO и Nginx в Docker Compose.
+Production-ready MVP сайта ножевой мастерской: публичный сайт, каталог, галерея выполненных работ, корзина, онлайн-оплата через ЮKassa, формы заявок, админ-панель, backend API, worker, PostgreSQL, Redis, MinIO и Nginx в Docker Compose.
 
 Проект предназначен только для демонстрации и продажи законных изделий: кухонных, хозяйственно-бытовых, туристических, разделочных, подарочных, декоративных и иных ножей, разрешённых к продаже в регионе работы мастерской. В карточке товара предусмотрены поля для юридической информации и документов.
 
@@ -77,6 +77,26 @@ ADMIN_PASSWORD=change_me_admin_password
 ```
 
 Также создаются категории, демо-товары, отзывы, настройки сайта и страницы `delivery-payment`, `documents`, `privacy-policy`.
+
+## Корзина и оплата
+
+Готовые товары со статусом `IN_STOCK` можно добавить в корзину только после входа в аккаунт. При переходе к оплате API:
+
+1. Проверяет, что все товары всё еще `IN_STOCK` и имеют цену.
+2. Резервирует товары статусом `RESERVED`.
+3. Создает заказ и платеж ЮKassa с `capture=true`.
+4. После webhook `payment.succeeded` переводит заказ в `PAID`, а товары в `SOLD`.
+5. После отмены/ошибки платежа возвращает товары из `RESERVED` в `IN_STOCK`.
+
+Доставка не входит в онлайн-платеж: клиент оплачивает товар, а способ, срок и стоимость доставки мастер согласует отдельно.
+
+Переменные окружения для платежей:
+
+```env
+YOOKASSA_API_URL=https://api.yookassa.ru/v3
+YOOKASSA_SHOP_ID=
+YOOKASSA_SECRET_KEY=
+```
 
 ## Команды разработки
 
@@ -189,6 +209,27 @@ GET  /api/public/pages/:slug
 GET  /api/public/settings
 ```
 
+Account:
+
+```http
+GET    /api/account/profile
+PATCH  /api/account/profile
+POST   /api/account/profile/avatar
+GET    /api/account/cart
+POST   /api/account/cart/items
+DELETE /api/account/cart/items/:itemId
+POST   /api/account/orders/checkout
+GET    /api/account/orders
+GET    /api/account/reviews/eligible
+POST   /api/account/reviews
+```
+
+Payments:
+
+```http
+POST /api/payments/yookassa/webhook
+```
+
 Admin:
 
 ```http
@@ -200,6 +241,7 @@ DELETE /api/admin/products/:id
 POST   /api/admin/products/:productId/images
 DELETE /api/admin/products/:productId/images/:imageId
 GET    /api/admin/categories
+GET    /api/admin/orders
 GET    /api/admin/leads
 GET    /api/admin/reviews
 GET    /api/admin/pages
@@ -258,6 +300,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
 - Фото товара загружается через upload, сохраняется в MinIO и metadata в PostgreSQL.
 - Фото можно удалить из админки.
 - Статус товара можно поменять на `SOLD`.
-- Проданные товары отображаются в портфолио с CTA «Заказать похожий».
+- Проданные товары отображаются в галерее работ с CTA «Заказать похожий».
+- Готовый товар добавляется в корзину, заказ создает платеж ЮKassa и появляется в админке.
 - Заявка с публичного сайта появляется в админке.
 - Есть `image/prompts.txt`, `.env.example`, `docker-compose.yml`, `docker-compose.prod.yml`, `README.md`.

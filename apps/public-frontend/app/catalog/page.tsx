@@ -55,8 +55,8 @@ export default async function Catalog({ searchParams }: { searchParams: Promise<
               <Link className="btn-primary" href="/custom-order">
                 Обсудить заказ
               </Link>
-              <Link className="btn-secondary" href="/portfolio">
-                Портфолио работ
+              <Link className="btn-secondary" href="/gallery">
+                Галерея работ
               </Link>
             </div>
           </div>

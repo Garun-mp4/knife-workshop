@@ -8,6 +8,9 @@ export const metadata = { title: "Контакты" };
 export default async function Contacts() {
   const settings = await apiGet<any>("/public/settings").catch(() => ({}));
   const site = settings.site ?? {};
+  const phoneHref = site.phone ? `tel:${String(site.phone).replace(/[^\d+]/g, "")}` : undefined;
+  const whatsappHref = site.whatsapp ? `https://wa.me/${String(site.whatsapp).replace(/[^\d]/g, "")}` : undefined;
+  const telegramHref = site.telegram ? `https://t.me/${String(site.telegram).replace(/^@/, "")}` : undefined;
 
   return (
     <main className="section">
@@ -19,22 +22,12 @@ export default async function Contacts() {
             Напишите удобным способом или оставьте заявку. Обычно мастер отвечает в течение рабочего дня.
           </p>
           <ImageBlock src={SITE_IMAGES.contactWorkshop} alt="Рабочий стол мастерской с телефоном и инструментами" />
-          <div className="card contact-card">
-            <p>
-              <strong>Телефон:</strong> {site.phone || "—"}
-            </p>
-            <p>
-              <strong>Telegram:</strong> {site.telegram || "—"}
-            </p>
-            <p>
-              <strong>WhatsApp:</strong> {site.whatsapp || "—"}
-            </p>
-            <p>
-              <strong>Email:</strong> {site.email || "—"}
-            </p>
-            <p>
-              <strong>Город:</strong> {site.city || "—"}
-            </p>
+          <div className="card contact-card contact-actions">
+            {site.phone ? <a className="contact-action" href={phoneHref}><strong>Позвонить</strong><span>{site.phone}</span></a> : null}
+            {site.telegram ? <a className="contact-action" href={telegramHref} target="_blank" rel="noreferrer"><strong>Telegram</strong><span>{site.telegram}</span></a> : null}
+            {site.whatsapp ? <a className="contact-action" href={whatsappHref} target="_blank" rel="noreferrer"><strong>WhatsApp</strong><span>{site.whatsapp}</span></a> : null}
+            {site.email ? <a className="contact-action" href={`mailto:${site.email}`}><strong>Email</strong><span>{site.email}</span></a> : null}
+            <div className="contact-action"><strong>Город</strong><span>{site.city || "—"}</span></div>
           </div>
         </div>
         <LeadForm title="Задать вопрос" />

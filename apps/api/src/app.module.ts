@@ -17,6 +17,9 @@ import { UploadModule } from "./modules/upload/upload.module";
 import { NotificationsModule } from "./modules/notifications/notifications.module";
 import { HealthModule } from "./modules/health/health.module";
 import { AuditLogModule } from "./modules/audit-log/audit-log.module";
+import { ProfileModule } from "./modules/profile/profile.module";
+import { CartModule } from "./modules/cart/cart.module";
+import { OrdersModule } from "./modules/orders/orders.module";
 
 @Module({
   imports: [
@@ -37,7 +40,10 @@ import { AuditLogModule } from "./modules/audit-log/audit-log.module";
     UploadModule,
     NotificationsModule,
     HealthModule,
-    AuditLogModule
+    AuditLogModule,
+    ProfileModule,
+    CartModule,
+    OrdersModule
   ]
 })
 export class AppModule {}

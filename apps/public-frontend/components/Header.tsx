@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu, ShoppingCart, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -8,10 +8,9 @@ import { AuthMenu } from "./AuthMenu";
 
 const navItems = [
   { href: "/catalog", label: "Каталог" },
-  { href: "/portfolio", label: "Портфолио" },
+  { href: "/gallery", label: "Галерея работ" },
   { href: "/custom-order", label: "Заказ" },
   { href: "/about", label: "О мастерской" },
-  { href: "/delivery-payment", label: "Доставка" },
   { href: "/contacts", label: "Контакты" }
 ];
 
@@ -69,6 +68,10 @@ export function Header() {
 
         <div className="header-actions">
           <AuthMenu />
+          <Link className="btn-secondary header-cart" href="/cart" aria-label="Корзина">
+            <ShoppingCart size={17} aria-hidden="true" />
+            <span>Корзина</span>
+          </Link>
           <Link className="btn-primary header-cta" href="/custom-order">
             Обсудить заказ
           </Link>
@@ -101,6 +104,10 @@ export function Header() {
             ))}
             <Link className="btn-primary" href="/custom-order" onClick={() => setOpen(false)}>
               Обсудить заказ
+            </Link>
+            <Link className="btn-secondary" href="/cart" onClick={() => setOpen(false)}>
+              <ShoppingCart size={17} aria-hidden="true" />
+              Корзина
             </Link>
             <AuthMenu variant="mobile" onNavigate={() => setOpen(false)} />
           </nav>

@@ -12,4 +12,17 @@ async function unwrap<T>(res: Response): Promise<T> {
 }
 export async function apiGet<T>(path: string, init?: RequestInit) { return unwrap<T>(await fetch(`${serverBase}${path}`, { ...init, next: { revalidate: 60, ...(init as any)?.next } })); }
 export async function apiPost<T>(path: string, body: unknown) { return unwrap<T>(await fetch(`${clientBase}${path}`, { method: "POST", credentials: "include", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })); }
+export async function apiClientGet<T>(path: string) {
+  return unwrap<T>(await fetch(`${clientBase}${path}`, { credentials: "include", cache: "no-store" }));
+}
+export async function apiClientSend<T>(path: string, method: string, body?: unknown) {
+  return unwrap<T>(
+    await fetch(`${clientBase}${path}`, {
+      method,
+      credentials: "include",
+      headers: body instanceof FormData ? undefined : body ? { "content-type": "application/json" } : undefined,
+      body: body instanceof FormData ? body : body ? JSON.stringify(body) : undefined
+    })
+  );
+}
 export type ProductList = { items: ProductDto[]; meta: { page: number; limit: number; total: number; pages: number } };

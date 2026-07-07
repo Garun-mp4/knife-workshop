@@ -7,7 +7,19 @@ import type { CookieOptions, Response } from "express";
 import { PrismaService } from "../../prisma/prisma.service";
 
 type JwtExpiresIn = JwtSignOptions["expiresIn"];
-type AuthUser = { id: string; email: string; role: UserRole; name: string };
+type AuthUser = {
+  id: string;
+  email: string;
+  role: UserRole;
+  name: string;
+  phone?: string | null;
+  telegram?: string | null;
+  whatsapp?: string | null;
+  city?: string | null;
+  deliveryAddress?: string | null;
+  deliveryComment?: string | null;
+  avatarUrl?: string | null;
+};
 
 function jwtExpiresIn(value: string | undefined, fallback: JwtExpiresIn): JwtExpiresIn {
   return (value ?? fallback) as JwtExpiresIn;
@@ -50,7 +62,35 @@ export class AuthService {
   constructor(private readonly prisma: PrismaService, private readonly jwt: JwtService) {}
 
   private authPayload(user: AuthUser): AuthUser {
-    return { id: user.id, email: user.email, role: user.role, name: user.name };
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      name: user.name,
+      phone: user.phone ?? null,
+      telegram: user.telegram ?? null,
+      whatsapp: user.whatsapp ?? null,
+      city: user.city ?? null,
+      deliveryAddress: user.deliveryAddress ?? null,
+      deliveryComment: user.deliveryComment ?? null,
+      avatarUrl: user.avatarUrl ?? null
+    };
+  }
+
+  private authSelect() {
+    return {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      phone: true,
+      telegram: true,
+      whatsapp: true,
+      city: true,
+      deliveryAddress: true,
+      deliveryComment: true,
+      avatarUrl: true
+    };
   }
 
   private async setSessionCookies(user: AuthUser, response: Response) {
@@ -91,7 +131,7 @@ export class AuthService {
     const role: UserRole = isAdminEmail(email) ? "ADMIN" : "CUSTOMER";
     const user = await this.prisma.user.create({
       data: { email, name: name.trim(), role, passwordHash: await argon2.hash(password) },
-      select: { id: true, email: true, name: true, role: true }
+      select: this.authSelect()
     });
     const payload = await this.setSessionCookies(user, response);
     return { user: payload };
@@ -105,7 +145,7 @@ export class AuthService {
     const role = isAdminEmail(user.email) && user.role === "CUSTOMER" ? "ADMIN" : user.role;
     const nextUser = role === user.role
       ? user
-      : await this.prisma.user.update({ where: { id: user.id }, data: { role }, select: { id: true, email: true, name: true, role: true, passwordHash: true, isActive: true, createdAt: true, updatedAt: true } });
+      : await this.prisma.user.update({ where: { id: user.id }, data: { role } });
     const payload = await this.setSessionCookies(nextUser, response);
     return { user: payload };
   }
@@ -116,7 +156,7 @@ export class AuthService {
       const payload = await this.jwt.verifyAsync(refreshToken, { secret: process.env.JWT_REFRESH_SECRET });
       const user = await this.prisma.user.findUnique({
         where: { id: payload.id },
-        select: { id: true, email: true, name: true, role: true, isActive: true }
+        select: { ...this.authSelect(), isActive: true }
       });
       if (!user?.isActive) throw new UnauthorizedException("Пользователь не найден");
       const next = await this.setSessionCookies(user, response);
@@ -130,7 +170,7 @@ export class AuthService {
   async me(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, email: true, name: true, role: true, isActive: true }
+      select: { ...this.authSelect(), isActive: true }
     });
     if (!user?.isActive) throw new UnauthorizedException("Пользователь не найден");
     return this.authPayload(user);

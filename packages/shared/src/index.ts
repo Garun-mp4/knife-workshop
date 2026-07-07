@@ -1,9 +1,10 @@
 export const PRODUCT_PUBLIC_STATUSES = ["IN_STOCK", "MADE_TO_ORDER", "SOLD", "COMING_SOON"] as const;
-export const PRODUCT_PRIVATE_STATUSES = ["DRAFT", "HIDDEN", "ARCHIVED"] as const;
+export const PRODUCT_PRIVATE_STATUSES = ["DRAFT", "RESERVED", "HIDDEN", "ARCHIVED"] as const;
 
 export type ProductStatus =
   | "DRAFT"
   | "IN_STOCK"
+  | "RESERVED"
   | "MADE_TO_ORDER"
   | "SOLD"
   | "HIDDEN"
@@ -29,7 +30,31 @@ export type LeadStatus =
   | "CANCELLED";
 
 export type UserRole = "CUSTOMER" | "OWNER" | "ADMIN" | "MANAGER";
-export type AuthUser = { id: string; email: string; name: string; role: UserRole };
+export type AuthUser = {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  phone?: string | null;
+  telegram?: string | null;
+  whatsapp?: string | null;
+  city?: string | null;
+  deliveryAddress?: string | null;
+  deliveryComment?: string | null;
+  avatarUrl?: string | null;
+};
+
+export type OrderStatus =
+  | "PENDING_PAYMENT"
+  | "PAID"
+  | "CONFIRMED"
+  | "READY"
+  | "SHIPPED"
+  | "COMPLETED"
+  | "CANCELLED"
+  | "PAYMENT_FAILED";
+
+export type PaymentStatus = "PENDING" | "SUCCEEDED" | "CANCELED" | "FAILED";
 
 export function isStaffRole(role: UserRole): boolean {
   return role === "OWNER" || role === "ADMIN" || role === "MANAGER";
@@ -87,6 +112,7 @@ export type ProductDto = {
 export const statusLabel: Record<ProductStatus, string> = {
   DRAFT: "Черновик",
   IN_STOCK: "В наличии",
+  RESERVED: "Зарезервирован",
   MADE_TO_ORDER: "Под заказ",
   SOLD: "Продан",
   HIDDEN: "Скрыт",
@@ -112,6 +138,24 @@ export const leadStatusLabel: Record<LeadStatus, string> = {
   SHIPPED: "Отправлена",
   CLOSED: "Закрыта",
   CANCELLED: "Отменена"
+};
+
+export const orderStatusLabel: Record<OrderStatus, string> = {
+  PENDING_PAYMENT: "Ожидает оплату",
+  PAID: "Оплачен",
+  CONFIRMED: "Подтвержден",
+  READY: "Готов к передаче",
+  SHIPPED: "Отправлен",
+  COMPLETED: "Завершен",
+  CANCELLED: "Отменен",
+  PAYMENT_FAILED: "Оплата не прошла"
+};
+
+export const paymentStatusLabel: Record<PaymentStatus, string> = {
+  PENDING: "Ожидает",
+  SUCCEEDED: "Успешно",
+  CANCELED: "Отменен",
+  FAILED: "Ошибка"
 };
 
 export function productCta(status: ProductStatus): string {

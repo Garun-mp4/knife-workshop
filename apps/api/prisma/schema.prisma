@@ -17,6 +17,7 @@ enum UserRole {
 enum ProductStatus {
   DRAFT
   IN_STOCK
+  RESERVED
   MADE_TO_ORDER
   SOLD
   HIDDEN
@@ -50,6 +51,28 @@ enum PageStatus {
   HIDDEN
 }
 
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  CONFIRMED
+  READY
+  SHIPPED
+  COMPLETED
+  CANCELLED
+  PAYMENT_FAILED
+}
+
+enum PaymentProvider {
+  YOOKASSA
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  CANCELED
+  FAILED
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -57,10 +80,20 @@ model User {
   name         String
   role         UserRole @default(CUSTOMER)
   isActive     Boolean  @default(true)
+  phone        String?
+  telegram     String?
+  whatsapp     String?
+  city         String?
+  deliveryAddress String?
+  deliveryComment String?
+  avatarUrl    String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   auditLogs    AuditLog[]
+  cart         Cart?
+  orders       Order[]
+  reviews      Review[]
 }
 
 model Category {
@@ -111,6 +144,9 @@ model Product {
 
   images                ProductImage[]
   leads                 Lead[]
+  cartItems             CartItem[]
+  orderItems            OrderItem[]
+  reviews               Review[]
 
   createdAt             DateTime      @default(now())
   updatedAt             DateTime      @updatedAt
@@ -168,8 +204,87 @@ model Lead {
   updatedAt   DateTime   @updatedAt
 }
 
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cartId, productId])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+  status          OrderStatus @default(PENDING_PAYMENT)
+  totalAmount     Decimal     @db.Decimal(10, 2)
+  customerName    String
+  email           String
+  phone           String?
+  telegram        String?
+  whatsapp        String?
+  city            String?
+  deliveryAddress String?
+  deliveryComment String?
+  deliveryText    String?
+  items           OrderItem[]
+  payments        Payment[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  title     String
+  slug      String?
+  price     Decimal  @db.Decimal(10, 2)
+  quantity  Int      @default(1)
+  imageUrl  String?
+  review    Review?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Payment {
+  id                String          @id @default(cuid())
+  orderId           String
+  order             Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider          PaymentProvider @default(YOOKASSA)
+  providerPaymentId String?         @unique
+  status            PaymentStatus   @default(PENDING)
+  amount            Decimal         @db.Decimal(10, 2)
+  confirmationUrl   String?
+  raw               Json?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
 model Review {
   id          String   @id @default(cuid())
+  productId   String?
+  product     Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  orderItemId String?  @unique
+  orderItem   OrderItem? @relation(fields: [orderItemId], references: [id], onDelete: SetNull)
   clientName  String
   city        String?
   text        String

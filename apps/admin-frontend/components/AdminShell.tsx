@@ -2,6 +2,7 @@
 
 import {
   Boxes,
+  ClipboardList,
   FileText,
   Gauge,
   Images,
@@ -20,6 +21,7 @@ const links = [
   { href: "/dashboard", label: "Обзор", icon: Gauge },
   { href: "/products", label: "Товары", icon: Boxes },
   { href: "/categories", label: "Категории", icon: LayoutList },
+  { href: "/orders", label: "Заказы", icon: ClipboardList },
   { href: "/leads", label: "Заявки", icon: MessageSquareText },
   { href: "/reviews", label: "Отзывы", icon: Star },
   { href: "/pages", label: "Страницы", icon: FileText },

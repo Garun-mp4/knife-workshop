@@ -1,13 +1,36 @@
-import { leadStatusLabel, leadTypeLabel, statusLabel, type LeadStatus, type LeadType, type ProductStatus } from "@knife/shared";
+import {
+  leadStatusLabel,
+  leadTypeLabel,
+  orderStatusLabel,
+  paymentStatusLabel,
+  statusLabel,
+  type LeadStatus,
+  type LeadType,
+  type OrderStatus,
+  type PaymentStatus,
+  type ProductStatus
+} from "@knife/shared";
 
 export const productStatusOptions: ProductStatus[] = [
   "DRAFT",
   "IN_STOCK",
+  "RESERVED",
   "MADE_TO_ORDER",
   "SOLD",
   "HIDDEN",
   "COMING_SOON",
   "ARCHIVED"
+];
+
+export const orderStatusOptions: OrderStatus[] = [
+  "PENDING_PAYMENT",
+  "PAID",
+  "CONFIRMED",
+  "READY",
+  "SHIPPED",
+  "COMPLETED",
+  "CANCELLED",
+  "PAYMENT_FAILED"
 ];
 
 export const leadStatusOptions: LeadStatus[] = [
@@ -39,6 +62,14 @@ export function leadTypeText(type?: LeadType | string | null) {
 
 export function leadStatusText(status?: LeadStatus | string | null) {
   return status && status in leadStatusLabel ? leadStatusLabel[status as LeadStatus] : "Не указан";
+}
+
+export function orderStatusText(status?: OrderStatus | string | null) {
+  return status && status in orderStatusLabel ? orderStatusLabel[status as OrderStatus] : "Не указан";
+}
+
+export function paymentStatusText(status?: PaymentStatus | string | null) {
+  return status && status in paymentStatusLabel ? paymentStatusLabel[status as PaymentStatus] : "Не указан";
 }
 
 export function pageStatusText(status?: string | null) {

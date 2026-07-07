@@ -92,9 +92,13 @@ export function AuthMenu({ variant = "desktop", onNavigate }: Props) {
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
-        <span className="auth-avatar" aria-hidden="true">
-          {userInitials(user)}
-        </span>
+        {user.avatarUrl ? (
+          <img className="auth-avatar auth-avatar--image" src={user.avatarUrl} alt="" width={42} height={42} />
+        ) : (
+          <span className="auth-avatar" aria-hidden="true">
+            {userInitials(user)}
+          </span>
+        )}
         {isMobile ? <span className="auth-summary__name">{user.name}</span> : null}
       </button>
       {open ? (

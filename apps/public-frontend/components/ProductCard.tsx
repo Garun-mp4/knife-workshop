@@ -1,6 +1,7 @@
 import type { ProductDto } from "@knife/shared";
 import { productCta } from "@knife/shared";
 import Link from "next/link";
+import { AddToCartButton } from "./AddToCartButton";
 import { StatusBadge } from "./StatusBadge";
 
 export function ProductCard({ product }: { product: ProductDto }) {
@@ -31,9 +32,13 @@ export function ProductCard({ product }: { product: ProductDto }) {
         <strong className="price">
           {price ? `${product.pricePrefix ? `${product.pricePrefix} ` : ""}${price}` : "Цена по запросу"}
         </strong>
-        <Link className="btn-secondary product-card__action" href={`/product/${product.slug}`}>
-          {productCta(product.status)}
-        </Link>
+        {product.status === "IN_STOCK" ? (
+          <AddToCartButton productId={product.id} className="btn-primary product-card__action" />
+        ) : (
+          <Link className="btn-secondary product-card__action" href={`/product/${product.slug}`}>
+            {productCta(product.status)}
+          </Link>
+        )}
       </div>
     </article>
   );

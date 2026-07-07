@@ -92,7 +92,7 @@ export function ProductForm({ product, categories }: { product?: any; categories
               ))}
             </select>
           </Field>
-          <Field label="Статус" hint="Публично видны только товары в наличии, под заказ, проданные и скоро.">
+          <Field label="Статус" hint="RESERVED ставится автоматически во время оплаты. Публично видны только товары в наличии, под заказ, проданные и скоро.">
             <select className="input" name="status" defaultValue={product?.status || "DRAFT"}>
               {productStatusOptions.map((status) => (
                 <option key={status} value={status}>

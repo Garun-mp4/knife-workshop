@@ -1,6 +1,7 @@
 import type { LeadType, ProductDto } from "@knife/shared";
 import { productCta, statusLabel } from "@knife/shared";
 import type { Metadata } from "next";
+import { AddToCartButton } from "../../../components/AddToCartButton";
 import { LeadForm } from "../../../components/LeadForm";
 import { ProductGallery } from "../../../components/ProductGallery";
 import { apiGet } from "../../../lib/api";
@@ -21,6 +22,7 @@ export async function generateMetadata({
 export default async function ProductPage({ params }: { params: Promise<{ productSlug: string }> }) {
   const { productSlug } = await params;
   const product = await apiGet<ProductDto>(`/public/products/${productSlug}`);
+  const reviews = await apiGet<any[]>(`/public/reviews?productId=${product.id}`).catch(() => []);
   const leadType: LeadType = product.status === "SOLD" ? "SIMILAR_ORDER" : "PRODUCT_ORDER";
   const price = product.price
     ? new Intl.NumberFormat("ru-RU", { style: "currency", currency: "RUB", maximumFractionDigits: 0 }).format(Number(product.price))
@@ -50,10 +52,20 @@ export default async function ProductPage({ params }: { params: Promise<{ produc
           <strong className="price">
             {price ? `${product.pricePrefix ? `${product.pricePrefix} ` : ""}${price}` : "Цена по запросу"}
           </strong>
-          {product.status === "SOLD" ? (
-            <p className="card sold-note">Этот нож уже продан, но мастер может изготовить похожий под ваши пожелания.</p>
-          ) : null}
-          <LeadForm productId={product.id} type={leadType} title={productCta(product.status)} />
+          {product.status === "IN_STOCK" ? (
+            <div className="card product-buy-box">
+              <h2>Можно оплатить онлайн</h2>
+              <p className="muted">Добавьте изделие в корзину. Доставка будет согласована отдельно после оплаты товара.</p>
+              <AddToCartButton productId={product.id} />
+            </div>
+          ) : (
+            <>
+              {product.status === "SOLD" ? (
+                <p className="card sold-note">Этот нож уже продан, но мастер может изготовить похожий под ваши пожелания.</p>
+              ) : null}
+              <LeadForm productId={product.id} type={leadType} title={productCta(product.status)} />
+            </>
+          )}
         </div>
       </div>
 
@@ -81,6 +93,28 @@ export default async function ProductPage({ params }: { params: Promise<{ produc
                 "При наличии предоставляется сертификат, экспертное заключение, декларация, отказное письмо или иной документ."}
             </p>
           </div>
+          <div className="section-head">
+            <h2 className="section-title">Отзывы покупателей</h2>
+            <p className="section-copy">Отзывы появляются после покупки и модерации мастерской.</p>
+          </div>
+          {reviews.length ? (
+            <div className="reviews-grid">
+              {reviews.map((review) => (
+                <article className="card review-card" key={review.id}>
+                  <div className="review-card__head">
+                    <strong>{review.clientName}</strong>
+                    <span>{review.rating ? `${review.rating}/5` : "Без оценки"}</span>
+                  </div>
+                  <p>{review.text}</p>
+                  {review.city ? <span className="muted">{review.city}</span> : null}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="card empty-inline">
+              <p className="muted">У этого изделия пока нет опубликованных отзывов.</p>
+            </div>
+          )}
         </div>
       </section>
     </main>
